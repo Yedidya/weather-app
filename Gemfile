@@ -14,7 +14,6 @@ gem 'coffee-rails', '~> 4.0.0'
 gem 'open-weather'
 gem 'geocoder'
 gem 'rails_12factor', group: :production
-gem 'pg'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
