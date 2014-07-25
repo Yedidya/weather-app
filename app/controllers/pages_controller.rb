@@ -1,15 +1,23 @@
-require 'open_weather'
+
 
 class PagesController < ApplicationController
 
   def weather
-    @results = Geocoder.search(request.remote_ip)
-  
-    weather_info = OpenWeather::Current.city("#{@results[0].data["city"]}, #{@results[0].data["region_name"]}")
+    @time = Time.now
 
-    @temp_celsius = (weather_info["main"]["temp"].to_f - 273).round(2)
+    @formatted_time = "#{format_time(@time.year)}-#{format_time(@time.month)}-#{format_time(@time.day)}T#{format_time(@time.hour)}:#{format_time(@time.min)}:#{format_time(@time.sec)}-0400"
+      
+    @results = Unirest.get("https://api.forecast.io/forecast/b36dc3b2dba43edd87bea86dd50d2973/37.8267,-122.423,#{@formatted_time}",
+      :headers => {"Accept" => "application/json"}).body
+     
+    @temp = @results["currently"]["temperature"]
+    #request.remote_ip
+  end
 
-    @temp_farenheit = (1.8 * @temp_celsius + 32).round(2)
+  def format_time(time)
+   time.to_s.rjust(2,"0") 
   end
 
 end 
+
+
